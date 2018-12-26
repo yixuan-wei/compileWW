@@ -1,6 +1,7 @@
 package MiniJava;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -26,6 +27,7 @@ public class MiniJavaAnalyze {
         //TODO error handle
         parser.removeErrorListeners();
         parser.addErrorListener(new ErrorListener());
+        parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         //generate AST
         ParserRuleContext ctx = parser.goal();
         generateAST(ctx, false, 0);
