@@ -23,6 +23,10 @@ public class MiniJavaAnalyze {
         MiniJavaLexer lexer = new MiniJavaLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MiniJavaParser parser = new MiniJavaParser(tokens);
+        //TODO error handle
+        parser.removeErrorListeners();
+        parser.addErrorListener(new ErrorListener());
+        //generate AST
         ParserRuleContext ctx = parser.goal();
         generateAST(ctx, false, 0);
         //TODO utilize graphviz to print graph for AST
@@ -47,6 +51,7 @@ public class MiniJavaAnalyze {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is2));
         p.waitFor();
         if (p.exitValue() != 0) {
+            //TODO error handle
             //说明命令执行失败
             //可以进入到错误处理步骤中
         }
