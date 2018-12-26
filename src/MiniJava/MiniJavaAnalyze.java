@@ -4,10 +4,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class MiniJavaAnalyze {
@@ -39,6 +36,29 @@ public class MiniJavaAnalyze {
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
+        System.setOut(System.out);
+        String path = "/Users/weiyixuan/Desktop/复旦/课程/大四上/编译/project/src/";
+        //path = "";
+        String command = path+"draw/dot -Tpng -o "+path+"graph.png "+path+"draw/test.dot";
+        String openCmd = "open "+path+"graph.png";
+        Process p = Runtime.getRuntime().exec(command);
+
+        InputStream is2 = p.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is2));
+        p.waitFor();
+        if (p.exitValue() != 0) {
+            //说明命令执行失败
+            //可以进入到错误处理步骤中
+        }
+        p = Runtime.getRuntime().exec(openCmd);
+        p.waitFor();
+        if(p.exitValue()!=0){
+            //TODO error handle
+        }
+        String s = null;
+        while ((s = reader.readLine()) != null) {
+            System.out.println(s);
+        }
     }
 
     private static void generateAST(RuleContext ctx, boolean verbose, int indentation) {
@@ -62,11 +82,19 @@ public class MiniJavaAnalyze {
     }
 
     private static void toDot(){
-        //TODO print detail : printLabel();
+        printLabel();
         int pos=0;
         for (int i=1; i<Sequence.size();i++){
             pos = Integer.parseInt(Sequence.get(i))-1;
             System.out.println(pos+Integer.toString(pos)+"->"+Sequence.get(i)+i);
+        }
+    }
+
+    private static void printLabel(){
+        for(int i=0;i<Sequence.size();i++){
+            System.out.println(Sequence.get(i)+i+"[label=\""+Type.get(i));
+            System.out.println("\\n "+Text.get(i));
+            System.out.println("\"]");
         }
     }
 
