@@ -19,10 +19,7 @@ public class MiniJavaAnalyze {
         MiniJavaLexer lexer = new MiniJavaLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MiniJavaParser parser = new MiniJavaParser(tokens);
-        ParseTree tree = parser.; // parse
-        ParseTreeWalker walker = new ParseTreeWalker();
-        MyMiniJavaListener listener = new MyMiniJavaListener(parser);
-        walker.walk(listener,tree);
+
     }
 
 }

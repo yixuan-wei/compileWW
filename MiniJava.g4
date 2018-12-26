@@ -1,24 +1,22 @@
 grammar MiniJava;
 goal:               mainClass (classDeclaration)* EOF;
-mainClass:          'class' Identifier '{' 'public' 'static' 'void' 'main' '(' 'String' '[' ']' Identifier ')' '{' statement '}' '}';
+mainClass:          'class' Identifier '{' 'public' 'static' 'void' 'main' '(' 'String' '[' ']' Identifier ')' '{' statement '}' '}' ;
 classDeclaration:   'class' Identifier ('extends' Identifier)? '{'(varDeclaration)* (methodDeclaration)* '}';
 varDeclaration:     type Identifier ';';
 methodDeclaration:  'public' type Identifier '(' (type Identifier (',' type Identifier)* )? ')' '{' (varDeclaration)* (statement)* 'return' expression ';' '}';
 
-type:       'int' '[' ']' #intArray
+type:       'int' '[' ']'   #intArray
             | 'boolean'     #bool
             | 'int'         #int
             | Identifier    #identify;
 
-statement:  '{' (statement)* '}'                                   #curlyBraces
+statement:  '{' (statement)* '}'                                   #curlyBraces 
             | 'if' '(' expression ')' statement 'else' statement   #ifElse
             | 'while' '(' expression ')' statement                 #while
             | 'System.out.println' '(' expression ')' ';'          #outPrint
             | Identifier '=' expression ';'                        #assignment
             | Identifier '[' expression ']' '=' expression ';'     #arrayAssignment
             ;
-
-INT: ([0]|[1-9][0-9]*);
 
 expression: 
             '(' expression ')'                                                  #parentheses
@@ -41,7 +39,7 @@ expression:
             ;
 
 Identifier: [a-zA-Z][_0-9a-zA-Z]*;
-
-WhiteSpace: [ \r\n\t]+->skip;
-COMMENT:    '/*' .*? '*/' ->skip;
-LineComment:'//' ~[\r\n]* ->skip;
+INT:        ([0]|[1-9][0-9]*);
+WhiteSpace: [ \r\n\t]+      ->skip;
+COMMENT:    '/*' .*? '*/'   ->skip;
+LineComment:'//' ~[\r\n]*   ->skip;
