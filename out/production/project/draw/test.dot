@@ -5,21 +5,45 @@ digraph AST{
 11[label="mainClass
 \n classBubbleSort{publicstaticvoidmain(String[]a){System.out.println(newBBS().Start(10));}}
 "]
-22[label="statement
+22[label="Identifier
+\n BubbleSort
+"]
+23[label="Identifier
+\n a
+"]
+24[label="statement
 \n System.out.println(newBBS().Start(10));
 "]
-33[label="expression
+35[label="expression
 \n newBBS().Start(10)
 "]
-44[label="expression
+46[label="expression
 \n newBBS()
 "]
-45[label="expression
+57[label="Identifier
+\n BBS
+"]
+48[label="Identifier
+\n Start
+"]
+49[label="expression
 \n 10
+"]
+510[label="INT
+\n 10
+"]
+111[label="EOF
+\n <EOF>
 "]
 00->11
 11->22
-22->33
-33->44
-33->45
+11->23
+11->24
+22->35
+33->46
+44->57
+33->48
+33->49
+44->510
+00->111
 }

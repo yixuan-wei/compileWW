@@ -9,9 +9,11 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class MiniJavaAnalyze {
+    static ArrayList<String> Parent = new ArrayList<String>();
     static ArrayList<String> Sequence = new ArrayList<String>();
     static ArrayList<String> Type = new ArrayList<String>();
     static ArrayList<String> Text = new ArrayList<String>();
+    static ArrayList<String> SymbolCnt = new ArrayList<String>();
     static String[] rules;
 
     public static void main(String[] args) throws Exception{
@@ -32,14 +34,15 @@ public class MiniJavaAnalyze {
         parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
         //generate AST
         ParserRuleContext ctx = parser.goal();
-        generateAST(ctx, false, 0);
+        //generateAST(ctx, false, 0);
         //TODO utilize graphviz to print graph for AST
         PrintStream out;
         try{
             out=new PrintStream("src/draw/test.dot");
             System.setOut(out);
             System.out.println("digraph AST{");
-            toDot();
+            //toDot();
+            generateAST(ctx,false,"00","");
             System.out.println("}");
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -70,35 +73,42 @@ public class MiniJavaAnalyze {
         }
     }
 
-    private static void generateAST(RuleContext ctx, boolean verbose, int indentation) {
-        boolean ignored = false;//!verbose && ctx.getChildCount() == 1 && ctx.getChild(0) instanceof ParserRuleContext;
+    private static void generateAST(RuleContext ctx, boolean verbose, String indentation, String preIndentation) {
+        boolean ignored = !verbose && ctx.getChildCount() == 1 && ctx.getChild(0) instanceof ParserRuleContext;
         if (!ignored) {
             String ruleName = MiniJavaParser.ruleNames[ctx.getRuleIndex()];
             //System.out.println("ruleName "+ruleName);
-            System.out.println("indentation: "+indentation);
-            Sequence.add(Integer.toString(indentation));
-            Type.add(ruleName);
-            Text.add(ctx.getText());
+            System.out.println(indentation+"[label=\""+ruleName+"\n"+ctx.getText()+"\"]");
+            if(!preIndentation.equals("")) {
+                //Parent.add(preIndentation);
+                System.out.println(preIndentation+"->"+indentation);
+                //Sequence.add(indentation);
+                //Type.add(ruleName);
+                //Text.add(ctx.getText());
+            }
         }
-
+        int tempIndentation = Integer.valueOf(indentation);
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree element = ctx.getChild(i);
-            System.out.println(element.getText());
+            //System.out.println(element.getText());
             //TODO switch among different context
             if (element instanceof RuleContext) {
                 //System.out.println("is rule context");
                 //System.out.println(((RuleContext) element).getRuleIndex());
-                generateAST((RuleContext) element, verbose, indentation + (ignored ? 0 : 1));
+                generateAST((RuleContext) element, verbose, String.valueOf(tempIndentation+10),indentation);
             }
-            else if(element instanceof TerminalNodeImpl){
+            /*else if(element instanceof TerminalNodeImpl){
                 Token t = ((TerminalNodeImpl) element).getSymbol();
-                System.out.println("rules length: "+rules.length);
-                System.out.println("max token type length: "+MiniJavaLexer.VOCABULARY.getMaxTokenType());
-                if(t.getType()>=rules.length && t.getType()<MiniJavaLexer.VOCABULARY.getMaxTokenType()) {
-                    System.out.println(MiniJavaLexer.VOCABULARY.getSymbolicName(t.getType()));
+                String lexerName = MiniJavaLexer.VOCABULARY.getSymbolicName(t.getType());
+                if(lexerName!=null) {
+                    System.out.println(lexerName);
                     System.out.println("indentation: "+indentation);
+                    Sequence.add(Integer.toString(indentation+1));
+                    tempSymbolCount++;
+                    Type.add(lexerName);
+                    Text.add(element.getText());
                 }
-            }
+            }*/
         }
     }
 
