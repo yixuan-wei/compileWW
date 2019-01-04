@@ -88,6 +88,7 @@ public class MiniJavaAnalyze {
             }
         }
         int tempIndentation = Integer.valueOf(indentation);
+        int tempChildCnt=0;
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree element = ctx.getChild(i);
             //System.out.println(element.getText());
@@ -95,20 +96,26 @@ public class MiniJavaAnalyze {
             if (element instanceof RuleContext) {
                 //System.out.println("is rule context");
                 //System.out.println(((RuleContext) element).getRuleIndex());
-                generateAST((RuleContext) element, verbose, String.valueOf(tempIndentation+10),indentation);
+                generateAST((RuleContext) element, verbose, String.valueOf(tempIndentation+10+tempChildCnt),indentation);
+                tempChildCnt++;
             }
-            /*else if(element instanceof TerminalNodeImpl){
+            else if(element instanceof TerminalNodeImpl){
                 Token t = ((TerminalNodeImpl) element).getSymbol();
                 String lexerName = MiniJavaLexer.VOCABULARY.getSymbolicName(t.getType());
                 if(lexerName!=null) {
-                    System.out.println(lexerName);
-                    System.out.println("indentation: "+indentation);
-                    Sequence.add(Integer.toString(indentation+1));
-                    tempSymbolCount++;
-                    Type.add(lexerName);
-                    Text.add(element.getText());
+                    //System.out.println(lexerName);
+                    //System.out.println("indentation: "+indentation);
+                    System.out.println((tempIndentation+10+tempChildCnt)+"[label=\""+lexerName+"\n"+element.getText()+"\"]");
+                    if(preIndentation.equals(""))
+                        System.out.println("00->"+(tempIndentation+10+tempChildCnt));
+                    else
+                        System.out.println(preIndentation+"->"+(tempIndentation+10+tempChildCnt));
+                    //Sequence.add(Integer.toString(indentation+1));
+                    //Type.add(lexerName);
+                    //Text.add(element.getText());
+                    tempChildCnt++;
                 }
-            }*/
+            }
         }
     }
 
