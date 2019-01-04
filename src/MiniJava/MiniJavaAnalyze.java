@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class MiniJavaAnalyze {
-    static String[] rules;
 
     public static void main(String[] args) throws Exception{
         String inputFile = null;
@@ -20,7 +19,6 @@ public class MiniJavaAnalyze {
         }
         ANTLRInputStream input = new ANTLRInputStream(is);
         MiniJavaLexer lexer = new MiniJavaLexer(input);
-        rules = MiniJavaLexer.ruleNames;
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MiniJavaParser parser = new MiniJavaParser(tokens);
         //TODO error handle
