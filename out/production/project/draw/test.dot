@@ -1,6 +1,6 @@
 digraph AST{
 00[label="goal
-\n classBubbleSort{publicstaticvoidmain(String[]a){System.out.println(newBBS().Start(10));}}}<EOF>
+\n classBubbleSort{publicstaticvoidmain(String[]a){System.out.println(newBBS().Start(10));}}<EOF>
 "]
 11[label="mainClass
 \n classBubbleSort{publicstaticvoidmain(String[]a){System.out.println(newBBS().Start(10));}}

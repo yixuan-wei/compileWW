@@ -2,8 +2,8 @@ package MiniJava;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ public class MiniJavaAnalyze {
     static ArrayList<String> Sequence = new ArrayList<String>();
     static ArrayList<String> Type = new ArrayList<String>();
     static ArrayList<String> Text = new ArrayList<String>();
+    static String[] rules;
 
     public static void main(String[] args) throws Exception{
         String inputFile = null;
@@ -22,6 +23,7 @@ public class MiniJavaAnalyze {
         }
         ANTLRInputStream input = new ANTLRInputStream(is);
         MiniJavaLexer lexer = new MiniJavaLexer(input);
+        rules = MiniJavaLexer.ruleNames;
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MiniJavaParser parser = new MiniJavaParser(tokens);
         //TODO error handle
@@ -69,21 +71,33 @@ public class MiniJavaAnalyze {
     }
 
     private static void generateAST(RuleContext ctx, boolean verbose, int indentation) {
-        boolean ignored = !verbose && ctx.getChildCount() == 1 && ctx.getChild(0) instanceof ParserRuleContext;
-
+        boolean ignored = false;//!verbose && ctx.getChildCount() == 1 && ctx.getChild(0) instanceof ParserRuleContext;
         if (!ignored) {
             String ruleName = MiniJavaParser.ruleNames[ctx.getRuleIndex()];
             //System.out.println("ruleName "+ruleName);
+            System.out.println("indentation: "+indentation);
             Sequence.add(Integer.toString(indentation));
             Type.add(ruleName);
             Text.add(ctx.getText());
         }
+
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree element = ctx.getChild(i);
+            System.out.println(element.getText());
             //TODO switch among different context
             if (element instanceof RuleContext) {
-                //System.out.println(element.getText());
+                //System.out.println("is rule context");
+                //System.out.println(((RuleContext) element).getRuleIndex());
                 generateAST((RuleContext) element, verbose, indentation + (ignored ? 0 : 1));
+            }
+            else if(element instanceof TerminalNodeImpl){
+                Token t = ((TerminalNodeImpl) element).getSymbol();
+                System.out.println("rules length: "+rules.length);
+                System.out.println("max token type length: "+MiniJavaLexer.VOCABULARY.getMaxTokenType());
+                if(t.getType()>=rules.length && t.getType()<MiniJavaLexer.VOCABULARY.getMaxTokenType()) {
+                    System.out.println(MiniJavaLexer.VOCABULARY.getSymbolicName(t.getType()));
+                    System.out.println("indentation: "+indentation);
+                }
             }
         }
     }
