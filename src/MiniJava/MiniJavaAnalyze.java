@@ -14,7 +14,7 @@ public class MiniJavaAnalyze {
         //Choose to display verbose or not
         System.out.println("please input your verbose choice: 1 for true, 0 for false");
         int b=System.in.read();
-        while (b!=49&&b!=48) {
+        while (b!=49&&b!=48) {//49 for ascii 1, 48 for 0
             System.out.println("please input your verbose choice: 1 for true, 0 for false");
             b = System.in.read();
         }
@@ -80,27 +80,29 @@ public class MiniJavaAnalyze {
     }
 
     private static void generateAST(RuleContext ctx, boolean verbose, String indentation, String preIndentation) {
+        //ignore unnecessary rule context nodes
         boolean ignored = ctx.getChildCount() == 1 && ctx.getChild(0) instanceof ParserRuleContext;
         if (!ignored) {
             String ruleName = MiniJavaParser.ruleNames[ctx.getRuleIndex()];
-            if(verbose)
+            if(verbose)//to display original text or not
                 System.out.println(indentation+"[label=\""+ruleName+"\n"+ctx.getText()+"\"]");
             else
                 System.out.println(indentation+"[label=\""+ruleName+"\"]");
-            if(!preIndentation.equals("")) {
+            if(!preIndentation.equals("")) {//exclude root node's connection
                 System.out.println(preIndentation+"->"+indentation);
             }
         }
-        int tempChildCnt=0;
+        int tempChildCnt=0;//identify each children with unique number
         for (int i = 0; i < ctx.getChildCount(); i++) {
             ParseTree element = ctx.getChild(i);
-            //TODO switch among different context
-            if (element instanceof RuleContext) {
+            //switch among different context
+            if (element instanceof RuleContext) {//non-leaf nodes for parser rules
                 generateAST((RuleContext) element, verbose, indentation+tempChildCnt,indentation);
                 tempChildCnt++;
             }
-            else if(element instanceof TerminalNodeImpl){
+            else if(element instanceof TerminalNodeImpl){//leaf nodes for lexer rules
                 Token t = ((TerminalNodeImpl) element).getSymbol();
+                //to exclude literal names, only include symbolic names
                 String lexerName = MiniJavaLexer.VOCABULARY.getSymbolicName(t.getType());
                 if(lexerName!=null) {
                     System.out.println(indentation+tempChildCnt+"[label=\""+lexerName+"\n"+element.getText()+"\"]");
