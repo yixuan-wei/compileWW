@@ -2,38 +2,7 @@ digraph AST{
 0[label="goal"]
 00[label="mainClass"]
 0->00
-000[label="Identifier
-BubbleSort"]
-00->000
-001[label="Identifier
-a"]
-00->001
-002[label="statement"]
-00->002
-0020[label="expression"]
-002->0020
-00200[label="expression"]
-0020->00200
-002000[label="Identifier
-BBS"]
-00200->002000
-00201[label="Identifier
-Start"]
-0020->00201
-00202[label="expression"]
-0020->00202
-002020[label="INT
-10"]
-00202->002020
 01[label="EOF
 <EOF>"]
 0->01
 }
-/Users/weiyixuan/Desktop/%e5%a4%8d%e6%97%a6/%e8%af%be%e7%a8%8b/%e5%a4%a7%e5%9b%9b%e4%b8%8a/%e7%bc%96%e8%af%91/project/out/production/project/
-ERROR: execute the generating graph.png order failed!
-Error: src/draw/test.dot: syntax error in line 26 near '/'
-Warning: syntax ambiguity - badly delimited number '8d' in line 26 of src/draw/test.dot splits into two tokens
-Warning: syntax ambiguity - badly delimited number '8b' in line 26 of src/draw/test.dot splits into two tokens
-Warning: syntax ambiguity - badly delimited number '9b' in line 26 of src/draw/test.dot splits into two tokens
-Warning: syntax ambiguity - badly delimited number '9b' in line 26 of src/draw/test.dot splits into two tokens
-Warning: syntax ambiguity - badly delimited number '8a' in line 26 of src/draw/test.dot splits into two tokens
