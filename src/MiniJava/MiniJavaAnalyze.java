@@ -6,6 +6,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MiniJavaAnalyze {
@@ -42,7 +44,7 @@ public class MiniJavaAnalyze {
         //TODO utilize graphviz to print graph for AST
         PrintStream out;
         try{
-            out=new PrintStream("src/draw/test.dot");
+            out=new PrintStream("draw/test.dot");
             System.setOut(out);
             System.out.println("digraph AST{");
             generateAST(ctx,verbose,"0","");
@@ -52,9 +54,8 @@ public class MiniJavaAnalyze {
         }
         //proceed graphviz command through Process
         System.setOut(System.out);
-        String path = "/Users/weiyixuan/Desktop/复旦/课程/大四上/编译/project/src/";
-        String command = path+"draw/dot -Tpng -o "+path+"graph.png "+path+"draw/test.dot";
-        String openCmd = "open "+path+"graph.png";
+        String command = "draw/dot -Tpng -o graph.png draw/test.dot";
+        String openCmd = "open graph.png";
         Process p = Runtime.getRuntime().exec(command);
         //Handle errors and output
         InputStream is2 = p.getInputStream();
